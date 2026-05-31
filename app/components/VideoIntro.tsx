@@ -94,6 +94,13 @@ export default function VideoIntro() {
         ease: 'power2.out',
       }, 1.15);
 
+      tl.to(heroMetaRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1.0,
+        ease: 'power2.out',
+      }, 1.3);
+
       tl.to(scrollRef.current, {
         opacity: 1,
         duration: 0.8,

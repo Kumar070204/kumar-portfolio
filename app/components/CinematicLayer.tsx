@@ -17,13 +17,14 @@ export default function CinematicLayer({ className }: CinematicLayerProps) {
     if (!canvas) return;
 
     // Renderer
+    const isMobile = window.innerWidth < 768;
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
       antialias: false,
       powerPreference: 'high-performance',
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.0 : 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
 
@@ -33,7 +34,7 @@ export default function CinematicLayer({ className }: CinematicLayerProps) {
     camera.position.z = 5;
 
     // Bokeh particles
-    const PARTICLE_COUNT = 220;
+    const PARTICLE_COUNT = isMobile ? 100 : 220;
     const positions = new Float32Array(PARTICLE_COUNT * 3);
     const colors = new Float32Array(PARTICLE_COUNT * 3);
     const sizes = new Float32Array(PARTICLE_COUNT);
@@ -97,7 +98,7 @@ export default function CinematicLayer({ className }: CinematicLayerProps) {
     scene.add(particles);
 
     // Secondary smaller particles layer
-    const MINI_COUNT = 380;
+    const MINI_COUNT = isMobile ? 150 : 380;
     const miniPositions = new Float32Array(MINI_COUNT * 3);
     const miniColors = new Float32Array(MINI_COUNT * 3);
     const miniSizes = new Float32Array(MINI_COUNT);
@@ -143,7 +144,10 @@ export default function CinematicLayer({ className }: CinematicLayerProps) {
     window.addEventListener('mousemove', handleMouse);
 
     // Resize
+    let lastWidth = window.innerWidth;
     const handleResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
