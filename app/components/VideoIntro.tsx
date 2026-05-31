@@ -345,7 +345,7 @@ export default function VideoIntro() {
                 <em>think, scale, and ship.</em>
               </h2>
               <p className={styles.bodyText}>
-                I'm a Computer Science student at VIT Chennai specializing in Business Analytics, bridging the gap between raw AI capability and real-world product impact. My work lives at the intersection of backend engineering, machine learning, and data-driven decision systems.
+                I&apos;m a Computer Science student at VIT Chennai specializing in Business Analytics, bridging the gap between raw AI capability and real-world product impact. My work lives at the intersection of backend engineering, machine learning, and data-driven decision systems.
               </p>
               <p className={styles.bodyText}>
                 At Prodapt Solutions, I worked deep in the telecom stack, building large-scale KPI systems, optimizing FTTH/GPON protocols, developing Dialogflow chatbots, and implementing early RAG pipelines. Back at campus, I shipped products that earned hackathon wins, a patent, and active research interest in vehicular network security.
@@ -378,7 +378,7 @@ export default function VideoIntro() {
       <section id="experience-section" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.sectionInner}>
           <div className={styles.sectionLabel}>Experience</div>
-          <h2 className={styles.sectionTitle}>Where I've worked</h2>
+          <h2 className={styles.sectionTitle}>Where I&apos;ve worked</h2>
 
           <div className={styles.expCard}>
             <div className={styles.expHeader}>
@@ -423,7 +423,7 @@ export default function VideoIntro() {
       <section id="projects-section" className={styles.section}>
         <div className={styles.sectionInner}>
           <div className={styles.sectionLabel}>Projects</div>
-          <h2 className={styles.sectionTitle}>Things I've built</h2>
+          <h2 className={styles.sectionTitle}>Things I&apos;ve built</h2>
 
           {/* Hero project */}
           <div className={styles.heroProject}>
@@ -431,7 +431,7 @@ export default function VideoIntro() {
             <div className={styles.heroProjectContent}>
               <div className={styles.heroProjectText}>
                 <h3 className={styles.heroProjectTitle}>BUSZerk</h3>
-                <p className={styles.heroProjectSub}>AI-powered commuter safety platform for Chennai's MTC network</p>
+                <p className={styles.heroProjectSub}>AI-powered commuter safety platform for Chennai&apos;s MTC network</p>
                 <p className={styles.bodyText}>
                   A full-stack safety and transit intelligence platform designed not just as an app but as a complete ecosystem. XGBoost models predict crowd density before you board. Gemini powers a context-aware in-app assistant. SOS alerts, fake call escape features, and real-time bus tracking make it a genuine safety net for urban commuters.
                 </p>
@@ -467,7 +467,7 @@ export default function VideoIntro() {
                   ))}
                 </div>
                 <div className={styles.projectLinks}>
-                  <a href="https://github.com/Kumar070204/BUSZerk" target="_blank" rel="noopener" className={styles.linkBtn}>
+                  <a href="https://github.com/Kumar070204/BUSZerk" target="_blank" rel="noopener noreferrer" className={styles.linkBtn}>
                     GitHub →
                   </a>
                 </div>
@@ -551,7 +551,7 @@ export default function VideoIntro() {
                   {proj.tags.map(t => <span key={t} className={styles.tag}>{t}</span>)}
                 </div>
                 <div className={styles.projectLinks}>
-                  <a href={proj.github} target="_blank" rel="noopener" className={styles.linkBtnSmall}>
+                  <a href={proj.github} target="_blank" rel="noopener noreferrer" className={styles.linkBtnSmall}>
                     GitHub →
                   </a>
                 </div>
@@ -694,11 +694,11 @@ export default function VideoIntro() {
         <div className={styles.sectionInner}>
           <div className={styles.sectionLabel}>Contact</div>
           <h2 className={styles.sectionTitle}>
-            Let's build<br />
+            Let&apos;s build<br />
             <em>something real.</em>
           </h2>
           <p className={styles.bodyText} style={{ maxWidth: '50ch', marginBottom: '3rem' }}>
-            Open to internships, collaborations, and interesting problems. If you're building something in AI, backend systems, or data-driven products — let's talk.
+            Open to internships, collaborations, and interesting problems. If you&apos;re building something in AI, backend systems, or data-driven products — let&apos;s talk.
           </p>
 
           <div className={styles.contactGrid}>
@@ -707,12 +707,12 @@ export default function VideoIntro() {
               <div className={styles.contactLabel}>Email</div>
               <div className={styles.contactValue}>kumaraswamyg2004@gmail.com</div>
             </a>
-            <a href="https://www.linkedin.com/in/kumaraswamy-g-872b81277/" target="_blank" rel="noopener" className={styles.contactCard}>
+            <a href="https://www.linkedin.com/in/kumaraswamy-g-872b81277/" target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
               <div className={styles.contactIcon}>in</div>
               <div className={styles.contactLabel}>LinkedIn</div>
               <div className={styles.contactValue}>kumaraswamy-g</div>
             </a>
-            <a href="https://github.com/Kumar070204" target="_blank" rel="noopener" className={styles.contactCard}>
+            <a href="https://github.com/Kumar070204" target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
               <div className={styles.contactIcon}>⌥</div>
               <div className={styles.contactLabel}>GitHub</div>
               <div className={styles.contactValue}>Kumar070204</div>
