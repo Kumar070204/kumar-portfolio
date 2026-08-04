@@ -3,8 +3,18 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import styles from '../styles/VideoIntro.module.css';
+import { useAnalyticsTracker } from '@/lib/analytics/useAnalyticsTracker';
+import {
+  trackNavItemClicked,
+  trackContactClicked,
+  trackEmailClicked,
+  trackProjectOpened,
+  trackGithubClicked,
+  trackLinkedInClicked,
+} from '@/lib/analytics/events';
 
 const CinematicLayer = dynamic(() => import('./CinematicLayer'), { ssr: false });
+
 
 // SVG icons
 const PlayIcon = () => (
@@ -37,7 +47,11 @@ const UnmuteIcon = () => (
 );
 
 export default function VideoIntro() {
+  // Mount automatic section visibility & scroll depth analytics observer
+  useAnalyticsTracker();
+
   const fgRef = useRef<HTMLVideoElement>(null);
+
   const bgRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLDivElement>(null);
@@ -209,7 +223,8 @@ export default function VideoIntro() {
     { id: 'contact-section', label: 'Contact' },
   ];
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = (id: string, label: string) => {
+    trackNavItemClicked({ nav_item: label, target_section: id });
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
@@ -218,12 +233,22 @@ export default function VideoIntro() {
     <>
       {/* ── NAV ── */}
       <nav className={styles.nav}>
-        <div className={styles.navLogo} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <div
+          className={styles.navLogo}
+          onClick={() => {
+            trackNavItemClicked({ nav_item: 'Logo Home', target_section: 'hero' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
           KG<span className={styles.navLogoDot}>.</span>
         </div>
         <div className={styles.navLinks}>
           {navItems.map(item => (
-            <button key={item.id} className={styles.navLink} onClick={() => scrollToSection(item.id)}>
+            <button
+              key={item.id}
+              className={styles.navLink}
+              onClick={() => scrollToSection(item.id, item.label)}
+            >
               {item.label}
             </button>
           ))}
@@ -231,10 +256,15 @@ export default function VideoIntro() {
         <a
           href="mailto:kumaraswamyg2004@gmail.com"
           className={styles.navCta}
+          onClick={() => {
+            trackContactClicked({ contact_method: 'Hire Me Nav', placement: 'Navigation' });
+            trackEmailClicked({ placement: 'Navigation' });
+          }}
         >
           Hire Me
         </a>
       </nav>
+
 
       {/* ── HERO ── */}
       <section ref={heroRef} className={styles.hero} style={{ opacity: 0 }}>
@@ -474,10 +504,30 @@ export default function VideoIntro() {
                   ))}
                 </div>
                 <div className={styles.projectLinks}>
-                  <a href="https://github.com/Kumar070204/BUSZerk" target="_blank" rel="noopener noreferrer" className={styles.linkBtn}>
+                  <a
+                    href="https://github.com/Kumar070204/BUSZerk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.linkBtn}
+                    onClick={() => {
+                      trackProjectOpened({
+                        project_name: 'BUSZerk',
+                        project_category: 'AI Commuter Safety',
+                        github_url: 'https://github.com/Kumar070204/BUSZerk',
+                        is_flagship: true,
+                        award: '8th / 75 teams at EmpowerTech',
+                      });
+                      trackGithubClicked({
+                        repository_name: 'BUSZerk',
+                        placement: 'Hero Project',
+                        destination_url: 'https://github.com/Kumar070204/BUSZerk',
+                      });
+                    }}
+                  >
                     GitHub →
                   </a>
                 </div>
+
               </div>
               <div className={styles.heroProjectVisual}>
                 <div className={styles.projectScreen}>
@@ -514,6 +564,7 @@ export default function VideoIntro() {
               {
                 title: 'Corporate Wellness',
                 sub: 'Gamified Employee Health Platform',
+                category: 'Gamified Health & GenAI',
                 desc: 'Maps real health metrics (steps, nutrition, and sleep) to in-game survival resources. Teams compete with AI-powered wellness insights. Patent filed for the core gamification and GenAI framework.',
                 tags: ['React', 'TypeScript', 'Vite', 'Tailwind', 'Random Forest', 'GenAI'],
                 badge: 'Patent Filed',
@@ -523,6 +574,7 @@ export default function VideoIntro() {
               {
                 title: 'SafeMotion',
                 sub: 'AI Activity Monitoring for Elderly Care',
+                category: 'AI Activity Monitoring',
                 desc: 'Human activity recognition system with real-time alerting. Modular ML pipeline with Firebase backend delivers context-aware risk analysis for elderly care, rehabilitation, and workplace safety.',
                 tags: ['Python', 'ML', 'Firebase', 'HAR', 'Flask'],
                 badge: null,
@@ -532,6 +584,7 @@ export default function VideoIntro() {
               {
                 title: 'Deepfake Detection',
                 sub: 'CNN-based AI Media Forensics',
+                category: 'AI Media Forensics',
                 desc: 'Identifies AI-generated faces in images and video frames using a CNN trained with PyTorch. FastAPI backend makes it production-deployable for real-time content verification pipelines.',
                 tags: ['PyTorch', 'CNN', 'OpenCV', 'FastAPI', 'Python'],
                 badge: null,
@@ -541,6 +594,7 @@ export default function VideoIntro() {
               {
                 title: 'Healthcare Chatbot',
                 sub: 'Conversational Medical Guidance',
+                category: 'Conversational AI',
                 desc: 'NLP-powered conversational AI for symptom checking and basic medical guidance. Designed for natural dialogue flows that feel approachable while providing responsible health information.',
                 tags: ['Python', 'NLP', 'Flask'],
                 badge: null,
@@ -558,12 +612,31 @@ export default function VideoIntro() {
                   {proj.tags.map(t => <span key={t} className={styles.tag}>{t}</span>)}
                 </div>
                 <div className={styles.projectLinks}>
-                  <a href={proj.github} target="_blank" rel="noopener noreferrer" className={styles.linkBtnSmall}>
+                  <a
+                    href={proj.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.linkBtnSmall}
+                    onClick={() => {
+                      trackProjectOpened({
+                        project_name: proj.title,
+                        project_category: proj.category,
+                        github_url: proj.github,
+                        award: proj.awards,
+                      });
+                      trackGithubClicked({
+                        repository_name: proj.title,
+                        placement: 'Project Card',
+                        destination_url: proj.github,
+                      });
+                    }}
+                  >
                     GitHub →
                   </a>
                 </div>
               </div>
             ))}
+
           </div>
         </div>
       </section>
@@ -709,22 +782,48 @@ export default function VideoIntro() {
           </p>
 
           <div className={styles.contactGrid}>
-            <a href="mailto:kumaraswamyg2004@gmail.com" className={styles.contactCard}>
+            <a
+              href="mailto:kumaraswamyg2004@gmail.com"
+              className={styles.contactCard}
+              onClick={() => {
+                trackContactClicked({ contact_method: 'Email', placement: 'Contact Section' });
+                trackEmailClicked({ placement: 'Contact Card', email_address: 'kumaraswamyg2004@gmail.com' });
+              }}
+            >
               <div className={styles.contactIcon}>✉</div>
               <div className={styles.contactLabel}>Email</div>
               <div className={styles.contactValue}>kumaraswamyg2004@gmail.com</div>
             </a>
-            <a href="https://www.linkedin.com/in/kumaraswamy-g-872b81277/" target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
+            <a
+              href="https://www.linkedin.com/in/kumaraswamy-g-872b81277/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.contactCard}
+              onClick={() => {
+                trackContactClicked({ contact_method: 'LinkedIn', placement: 'Contact Section' });
+                trackLinkedInClicked({ placement: 'Contact Card', destination_url: 'https://www.linkedin.com/in/kumaraswamy-g-872b81277/' });
+              }}
+            >
               <div className={styles.contactIcon}>in</div>
               <div className={styles.contactLabel}>LinkedIn</div>
               <div className={styles.contactValue}>kumaraswamy-g</div>
             </a>
-            <a href="https://github.com/Kumar070204" target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
+            <a
+              href="https://github.com/Kumar070204"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.contactCard}
+              onClick={() => {
+                trackContactClicked({ contact_method: 'GitHub', placement: 'Contact Section' });
+                trackGithubClicked({ repository_name: 'Profile', placement: 'Contact Card', destination_url: 'https://github.com/Kumar070204' });
+              }}
+            >
               <div className={styles.contactIcon}>⌥</div>
               <div className={styles.contactLabel}>GitHub</div>
               <div className={styles.contactValue}>Kumar070204</div>
             </a>
           </div>
+
 
           <div className={styles.footerLine}>
             <span>© 2025 Kumaraswamy G</span>
