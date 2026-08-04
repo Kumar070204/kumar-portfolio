@@ -91,10 +91,11 @@ export const initMixpanel = (): void => {
 
   try {
     mixpanel.init(token, {
+      api_host: "https://api-eu.mixpanel.com", // Directs events to EU data residency
       debug: process.env.NODE_ENV === 'development',
-      track_pageview: false, // Prevents duplicate auto pageviews
+      track_pageview: false,
       persistence: 'localStorage',
-      ignore_dnt: false,
+      ignore_dnt: true, // Prevents Do Not Track headers from silently blocking events
     });
     isInitialized = true;
     if (process.env.NODE_ENV === 'development') {
@@ -123,7 +124,7 @@ export const trackRawEvent = (eventName: string, properties?: Record<string, unk
         ...properties,
       };
       mixpanel.track(eventName, mergedProps);
-      
+
       if (process.env.NODE_ENV === 'development') {
         console.log(`[Mixpanel Event] "${eventName}"`, mergedProps);
       }
